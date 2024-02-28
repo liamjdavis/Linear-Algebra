@@ -79,6 +79,36 @@ class Matrix {
         return product;
     }
 
+    // Matrix Multiplication
+    Matrix matrix_multiply(Matrix m) {
+        if (cols != m.rows) {
+            throw std::invalid_argument("columns in first matrix must equal rows in second matrix");
+        }
+
+        Matrix product = Matrix(rows, m.cols);
+
+        // fill matrix
+        int index = 0;
+        int* values = new int[rows * m.cols];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < m.cols; j++) {
+                int val = 0;
+
+                // iterate through row/col
+                for (int k = 0; k < sizeof(arr[i]); k++) {
+                    val += arr[i][k] * m.arr[k][j];
+                }
+
+                values[index] = val;
+                index++;
+            }
+        }
+
+        product.fill_matrix(values);
+        return product;
+    }
+
     // Matrix destructor
     ~Matrix() {
         // deallocate memory
