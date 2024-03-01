@@ -11,6 +11,7 @@ class Matrix {
         this->cols = cols;
         
         // allocate memory for matrix
+        arr = new int*[rows];
         for (int i = 0; i < rows; i++) {
             arr[i] = new int[cols];
         }
@@ -33,7 +34,7 @@ class Matrix {
             for (int j = 0; j < cols; j++) {
                 std::cout << arr[i][j] << " ";
             }
-            std::cout << std::ends;
+            std::cout << std::endl;
         }
     }
 
@@ -82,7 +83,7 @@ class Matrix {
     // Matrix Multiplication
     Matrix matrix_multiply(Matrix m) {
         if (cols != m.rows) {
-            throw std::invalid_argument("columns in first matrix must equal rows in second matrix");
+        throw std::invalid_argument("columns in first matrix must equal rows in second matrix");
         }
 
         Matrix product = Matrix(rows, m.cols);
@@ -96,7 +97,7 @@ class Matrix {
                 int val = 0;
 
                 // iterate through row/col
-                for (int k = 0; k < sizeof(arr[i]); k++) {
+                for (int k = 0; k < cols; k++) {
                     val += arr[i][k] * m.arr[k][j];
                 }
 
@@ -119,7 +120,3 @@ class Matrix {
     }
 
 };
-
-int main() {
-    
-}
