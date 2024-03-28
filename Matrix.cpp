@@ -1,4 +1,5 @@
 #include <iostream>
+#include <set>
 
 class Matrix {
     public:
@@ -29,7 +30,7 @@ class Matrix {
     }
 
     // display Matrix
-    void display_matrix() {
+    static void display_matrix() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 std::cout << arr[i][j] << " ";
@@ -108,6 +109,50 @@ class Matrix {
 
         product.fill_matrix(values);
         return product;
+    }
+
+    // boolean for is in RREF
+    bool isRREF() {
+        std::set<int> leading_column_indices;
+        int last_nonzero_column = -1;
+
+        for (int i = 0; i < rows; i++) {
+            bool leading_one_found = false;
+
+            // condition 1: leading entry in row is 1
+            if (arr[i][i] != 1) {
+                return false;
+            }
+
+            // condition 2: pivot is one to the right of the last pivot
+            if (i == 0 && !leading_column_indices.empty() && *leading_column_indices.begin() <= last_nonzero_column) {
+                return false;
+            }
+            
+            // condition 3: all non pivots are zero
+            for (int j = 0; j < cols; ++j) {
+                if (arr[i][j] != 0) {
+                    if (j > last_nonzero_column) {
+                        leading_column_indices.insert(j);
+                        last_nonzero_column = j;
+                    } else if (j < last_nonzero_column) {
+                        return false;
+                    } else {
+                        leading_one_found = true;
+                    }
+
+                    if (leading_one_found && arr[i][j] != 1) {
+                        return false;
+                    }
+                } else {
+                    if (j == last_nonzero_column) {
+                        leading_one_found = false;
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     // Matrix destructor
