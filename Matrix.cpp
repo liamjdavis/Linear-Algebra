@@ -30,7 +30,7 @@ class Matrix {
     }
 
     // display Matrix
-    static void display_matrix() {
+    void display_matrix() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 std::cout << arr[i][j] << " ";
@@ -154,6 +154,59 @@ class Matrix {
 
         return true;
     }
+
+    static Matrix row_reduce(Matrix m) {
+        // initialize leading column index
+        int leading_col = 0;
+
+        // iterate over rows
+        for (int i = 0; i < m.rows; i++) {
+            // find pivot in current row
+            bool pivot_found = false;
+
+            for (int j = leading_col; j < m.cols; j++) {
+                if (m.arr[i][j] == 1) {
+                    pivot_found = true;
+
+                    // if necessary, swap rows to bring pivot to the top
+                    if (i != leading_col) {
+                        std::swap(m.arr[i], m.arr[leading_col]);
+                    }
+
+                    // update leading column
+                    leading_col = j;
+                    break;
+                }
+            }
+
+            if (pivot_found) {
+                // make the pivot 1
+                for (int j = 0; j < m.cols; j++) {
+                    m.arr[i][j] /= m.arr[i][leading_col];
+                }
+
+                // eliminate entries below the pivot
+                for (int k = i + 1; k < m.rows; k++) {
+                    if (m.arr[k][leading_col] == 1) {
+                        for (int j = 0; j < m.cols; j++) {
+                            m.arr[k][j] ^= m.arr[i][j];
+                        }
+                    }
+                }
+            } else {
+                // if no pivot found, move to the next column
+                leading_col++;
+            }
+
+            // check if matrix is in echelon form
+            if (m.isRREF()) {
+                break;
+            }
+        }
+
+        return m;
+    }
+
 
     // Matrix destructor
     ~Matrix() {

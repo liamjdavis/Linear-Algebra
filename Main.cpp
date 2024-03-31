@@ -8,5 +8,7 @@ int main() {
     m.display_matrix();
     bool rref = m.isRREF();
     std::cout << "Is the matrix in Reduced Row Echelon Form (RREF)? " << std::boolalpha << rref << std::endl;
+    Matrix::row_reduce(m);
+    m.display_matrix();
     return 0;
 }
